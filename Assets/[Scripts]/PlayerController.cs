@@ -8,35 +8,60 @@ public class PlayerController : MonoBehaviour
     public float _force;
     public bool iFrames = false;
     Rigidbody2D _rigidibody;
+    private int hp=100;
+    public HealthController healthController;
 
-    public int HP = 100;
+    Animator anim;
 
 
     // Start is called before the first frame update
     void Start()
     {
         _rigidibody = GetComponent<Rigidbody2D>();
+        healthController = FindObjectOfType<HealthController>();
+        anim = GetComponent<Animator>();
     }
 
     // Update is called once per frame
     void FixedUpdate()
     {
-        if (HP > 0)
+        if (hp > 0)
             Movement();
+        Attack();
     }
     
       public float xM(float x)
     {
-        x = Input.GetAxisRaw("Horizontal");
-        if (x > 0.0f || x< 0.0f)
-          transform.localScale = new Vector3(1.5f, 0.3f, 0.0f);
+        
+        if (x > 0.0f)
+        {
+           transform.localRotation = Quaternion.Euler(0.0f, 0.0f, -90.0f);
+            transform.localScale = new Vector2(-1, 1);
+        }
+        else
+        {
+            transform.localRotation = Quaternion.Euler(0.0f, 0.0f, 90.0f);
+            transform.localScale = new Vector2(1, 1);
+        }
+            
+
         return x;
     }
     public float yM(float y)
     {
-        y = Input.GetAxisRaw("Vertical");
-        if (y > 0.0f || y < 0.0f)
-            transform.localScale = new Vector3(0.5f, 1f, 0.0f);
+     
+        if (y > 0.0f)
+        {
+            transform.localRotation = Quaternion.Euler(0.0f, 0.0f, 0.0f);
+            transform.localScale = new Vector2(1, 1);
+        }
+            
+        else
+        {
+            transform.localRotation = Quaternion.Euler(0.0f, 0.0f, 0.0f);
+            transform.localScale = new Vector2(1, -1);
+        }
+           
         return y;
     }
 
@@ -44,30 +69,65 @@ public class PlayerController : MonoBehaviour
     {
         float x = Input.GetAxisRaw("Horizontal");
         float y = Input.GetAxisRaw("Vertical");
+       
+     
 
         if (x != 0.0f)
         {
             transform.position += new Vector3(xM(x), 0.0f, 0.0f) * Time.deltaTime * _speed;
+            anim.SetInteger("AnimationType", 1);
+          
 
         }
+        else
+        {
+            anim.SetInteger("AnimationType", 0);
+          
+        }
+            
 
         if (y != 0.0f)
+        {
             transform.position += new Vector3(0.0f, yM(y), 0.0f) * Time.deltaTime * _speed;
+            anim.SetInteger("AnimationType", 1);
+           
+        }
+        else
+            anim.SetInteger("AnimationType", 0);
+
     }
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        HurtPlayer(other);
+        
+        if (other.gameObject.CompareTag("Spike"))
+        {
+           
+            healthController.DamageTaken(30);
+        }
+       
     }
+
+    private void Attack()
+    {
+        float fire = Input.GetAxisRaw("Fire1");
+        if (fire > 0.0)
+        {
+            anim.SetInteger("AnimationType", 2);
+            
+
+        }
+ }
 
     private void OnTriggerStay2D(Collider2D other)
     {
         HurtPlayer(other);
+
     }
 
     private void OnTriggerExit2D(Collider2D other)
     {
-        HurtPlayer(other);
+         HurtPlayer(other);
     }
 
     //a method for detecting if the trigger is enabled on top of the player is necessary. right now, it only gets called when the player moves, then stops working until the player moves again
@@ -80,13 +140,14 @@ public class PlayerController : MonoBehaviour
             if (other.enabled)
             {
                 iFrames = true;
-                HP -= other.GetComponent<Attack>().damage;
+                hp -= other.GetComponent<Attack>().damage;
             }
         }
 
-        if (HP <= 0)
+        if (hp <= 0)
         {
             Debug.Log("You died!"); //more touchups are obviously needed, but this will do for now
         }
     }
+
 }
