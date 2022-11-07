@@ -1,14 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+[System.Serializable]
 public class Attack : MonoBehaviour
 {
     public GameObject parent;
     public Collider2D box;
     public SpriteRenderer sprite;
 
-    public int damage = 35;
+    public int damage;
+    
     // Start is called before the first frame update
     void Start()
     {
@@ -19,8 +20,8 @@ public class Attack : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
-
+      
     }
 }

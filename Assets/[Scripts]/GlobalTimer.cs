@@ -9,10 +9,13 @@ public class GlobalTimer : MonoBehaviour
     public float despawnBox = 0.25f;
     public GameObject attack;
 
+    public HealthController health;
     // Start is called before the first frame update
     void Start()
     {
         
+        health = GetComponent<HealthController>();
+        attack = GameObject.Find("Melee");
     }
 
     // Update is called once per frame
@@ -28,6 +31,7 @@ public class GlobalTimer : MonoBehaviour
             {
                 //Debug.Log("Times up!");
                 this.GetComponent<EnemyController>().canAttack = true;
+               
             }
         }
         if (this.GetComponent<EnemyController>().showBox)
@@ -42,6 +46,8 @@ public class GlobalTimer : MonoBehaviour
                 attack.GetComponent<SpriteRenderer>().enabled = true;
                 attack.GetComponent<Collider2D>().enabled = true;
                 this.Attack();
+                
+            
             }
         }
     }

@@ -12,17 +12,19 @@ public struct Target
     public bool z;
 
 }
+
 public class Follow : MonoBehaviour
 {
     public Target target;
+   
     // Start is called before the first frame update
     void Start()
     {
-        
+     
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
         transform.position = new Vector3(
             target.x ? target.transform.position.x + target.offSet.x : transform.position.x,

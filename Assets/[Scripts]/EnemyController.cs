@@ -17,14 +17,28 @@ public class EnemyController : MonoBehaviour
     public bool isAttacking = false;
     public bool canAttack = false;
     public bool showBox = false;
-
+    EnemyHealthSystem healthSystem;
     public int damage = 25;
-
     
+    public PlayerController playerController;
+    //Checking if player within the radius
+    public bool isClose;
+
+    public LayerMask playerMask;
+    
+    public int radius;
+
+    private Vector3 originalPosition;
+
+
 
     void Start()
     {
         rb = this.GetComponent<Rigidbody>();
+
+        originalPosition = transform.position;
+        healthSystem = GetComponent<EnemyHealthSystem>();   
+        playerController = FindObjectOfType<PlayerController>();
     }
 
     // Update is called once per frame
@@ -52,20 +66,71 @@ public class EnemyController : MonoBehaviour
                         this.GetComponent<GlobalTimer>().attackBuffer = buffer;
                         isAttacking = false;
                         showBox = true;
+
+                       
                         this.GetComponent<GlobalTimer>().boxTimer = 0.5f;
                     }
                 }
             }
+            
+        }
+        
+          
+       
+            Chase();
+
+
+    }
+
+   
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawWireSphere(this.transform.position, radius);
+    }
+    public void Chase()
+    {
+        if (playerController.startChase)
+        {
+            Vector3 direction = transform.position - _player.position;
+            float magnitude = direction.magnitude;
+            float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+            direction.Normalize();
+            transform.Translate(direction * Time.deltaTime * chaseSpeed);
+            Quaternion rotation = Quaternion.LookRotation(Vector3.forward, direction);
+            transform.rotation = Quaternion.RotateTowards(transform.rotation, rotation, Time.deltaTime * rSpeed);
+        }
+        if (playerController.endChase)
+            Return();
+       
+           
+    }
+
+    public void Return()
+    {
+        if (playerController.endChase)
+        {
+            Vector3 direction = transform.position - originalPosition;
+            float magnitude = direction.magnitude;
+            float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+            direction.Normalize();
+            transform.Translate(direction * Time.deltaTime * chaseSpeed);
+            Quaternion rotation = Quaternion.LookRotation(Vector3.forward, direction);
+            transform.rotation = Quaternion.RotateTowards(transform.rotation, rotation, Time.deltaTime * rSpeed);
+            if (transform.position == originalPosition)
+            {
+                transform.Translate(direction * Time.deltaTime * 0);
+                transform.rotation = Quaternion.RotateTowards(transform.rotation, rotation, Time.deltaTime * 0);
+            }
+
             else
             {
-                Vector3 direction = transform.position - _player.position;
-
-                float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-                direction.Normalize();
                 transform.Translate(direction * Time.deltaTime * chaseSpeed);
-                Quaternion rotation = Quaternion.LookRotation(Vector3.forward, direction);
                 transform.rotation = Quaternion.RotateTowards(transform.rotation, rotation, Time.deltaTime * rSpeed);
             }
+
         }
+       
     }
+
 }
