@@ -13,7 +13,7 @@ public class HealthController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        healthBar = transform.GetChild(0).GetComponent<Slider>();
+        healthBar = transform.GetChild(1).GetComponent<Slider>();
         HealthReset();
     }
 

@@ -14,20 +14,24 @@ public class PlayerController : MonoBehaviour
     public bool endChase;   
     public HealthController healthController;
     public EnemyHealthSystem enemyHealthSystem;
+    public DodgeBar dodge;
     public bool attack;
     public int radius;
-    public float dashSpeed =1f;
+    public string direction;
     Animator anim;
     public GameObject gem;
     public GameObject enemy;
     Attack attck;
-
+    public float dodgeSpeed;
+    public float delay = 0.2f;
+    public bool dashPerformed;
     // Start is called before the first frame update
     void Start()
     {
         _rigidibody = GetComponent<Rigidbody2D>();
         healthController = GameObject.Find("PlayerHealthSystem").GetComponent<HealthController>();
         anim = GetComponent<Animator>();
+        dodge = FindObjectOfType<DodgeBar>();
         enemyHealthSystem = FindObjectOfType<EnemyHealthSystem>();
         attck=GetComponent<Attack>();
     }
@@ -35,12 +39,11 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
-       
+        
         Movement();
         Attack();
-       
-       
-       
+       DashPerformed();
+
     }
     
       public float xM(float x)
@@ -50,11 +53,13 @@ public class PlayerController : MonoBehaviour
         {
            transform.localRotation = Quaternion.Euler(0.0f, 0.0f, -90.0f);
             transform.localScale = new Vector2(-1, 1);
+            direction = "right";
         }
         else
         {
             transform.localRotation = Quaternion.Euler(0.0f, 0.0f, 90.0f);
             transform.localScale = new Vector2(1, 1);
+            direction ="left";
         }
             
 
@@ -62,17 +67,20 @@ public class PlayerController : MonoBehaviour
     }
     public float yM(float y)
     {
-     
+        
         if (y > 0.0f)
         {
             transform.localRotation = Quaternion.Euler(0.0f, 0.0f, 0.0f);
             transform.localScale = new Vector2(1, 1);
+            direction="top";
+
         }
-            
+
         else
         {
             transform.localRotation = Quaternion.Euler(0.0f, 0.0f, 0.0f);
             transform.localScale = new Vector2(1, -1);
+            direction = "bottom";
         }
            
         return y;
@@ -82,33 +90,88 @@ public class PlayerController : MonoBehaviour
     {
         float x = Input.GetAxisRaw("Horizontal");
         float y = Input.GetAxisRaw("Vertical");
-        bool dash = Input.GetKey(KeyCode.Space);
-     
+      
+       // bool dodge = Input.GetKeyDown(KeyCode.Space);
 
         if (x != 0.0f)
         {
             transform.position += new Vector3(xM(x), 0.0f, 0.0f) * Time.deltaTime * _speed;
             anim.SetInteger("AnimationType", 1);
-         
+            Dash();
+
+
 
         }
         else
         {
             anim.SetInteger("AnimationType", 0);
           
+          
         }
-        if (dash)
-            _rigidibody.AddForce(Vector3.right);
+
+  
 
         if (y != 0.0f)
         {
             transform.position += new Vector3(0.0f, yM(y), 0.0f) * Time.deltaTime * _speed;
             anim.SetInteger("AnimationType", 1);
-           
+            Dash();
+
         }
         else
             anim.SetInteger("AnimationType", 0);
 
+    }
+
+    private void Dash()
+    {
+        float dash = Input.GetAxisRaw("Jump");
+        if (dash > 0 && direction == "right" && dodge.dodgeBar.value == 100)
+        {
+            // Vector3 dir= Vector3.right - this.transform.position.x;
+            _rigidibody.AddForce(Vector2.right * dodgeSpeed, ForceMode2D.Impulse);
+            StartCoroutine(DodgeReset());
+           
+        }
+      
+        if (dash > 0 && direction == "left" && dodge.dodgeBar.value == 100)
+        {
+            // Vector3 dir= Vector3.right - this.transform.position.x;
+            _rigidibody.AddForce(Vector2.left * dodgeSpeed, ForceMode2D.Impulse);
+            StartCoroutine(DodgeReset());
+           
+        }
+       
+        if (dash > 0 && direction == "top" && dodge.dodgeBar.value == 100)
+        {
+            // Vector3 dir= Vector3.right - this.transform.position.x;
+            _rigidibody.AddForce(Vector2.up * dodgeSpeed, ForceMode2D.Impulse);
+            StartCoroutine(DodgeReset());
+           
+        }
+       
+        if (dash > 0 && direction == "bottom" && dodge.dodgeBar.value == 100)
+        {
+            // Vector3 dir= Vector3.right - this.transform.position.x;
+            _rigidibody.AddForce(Vector2.down * dodgeSpeed, ForceMode2D.Impulse);
+            StartCoroutine(DodgeReset());
+           
+        }
+       
+
+    }
+    public bool DashPerformed()
+    {
+        float dash = Input.GetAxisRaw("Jump");
+        if (dash != 0 && dodge.dodgeBar.value == 100)
+            return dashPerformed = true;
+        else
+            return dashPerformed = false;
+    }
+    private IEnumerator DodgeReset()
+    {
+        yield return new WaitForSeconds(delay);
+        _rigidibody.velocity = Vector3.zero;
     }
 
     private void OnTriggerEnter2D(Collider2D other)
