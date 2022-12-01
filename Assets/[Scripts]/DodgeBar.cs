@@ -8,6 +8,7 @@ public class DodgeBar : MonoBehaviour
 
     public Slider dodgeBar;
     public PlayerController playerController;
+    public int refillSpeed;
     void Start()
     {
         dodgeBar = transform.GetChild(1).GetComponent<Slider>();
@@ -36,7 +37,7 @@ public class DodgeBar : MonoBehaviour
     {
         if (dodgeBar.value < 100)
         {
-            dodgeBar.value +=1;
+            dodgeBar.value +=1 * refillSpeed;
         }
         if (dodgeBar.value > 100)
             dodgeBar.value = 100;

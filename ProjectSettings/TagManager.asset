@@ -6,6 +6,8 @@ TagManager:
   tags:
   - Prop
   - Spike
+  - Melee
+  - Enemy
   layers:
   - Default
   - TransparentFX
@@ -13,10 +15,10 @@ TagManager:
   - Player
   - Water
   - UI
-  - 
-  - 
-  - 
-  - 
+  - wall
+  - outerwall
+  - WolfEnemy
+  - Drugar
   - 
   - 
   - 
