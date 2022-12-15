@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 [System.Serializable]
-public class WolfAI : MonoBehaviour
+public class WolfAI : SoundController
 {
     [Header("WolfBrain")]
 
@@ -25,7 +25,7 @@ public class WolfAI : MonoBehaviour
     private WolfAiDetection detected;
     private PlayerController player;
     public float chaseSpeed = 6f;
-
+    public int dmg;
     public float time;
     public Vector2 attack;
     public bool hurtPlayer;
@@ -37,8 +37,8 @@ public class WolfAI : MonoBehaviour
         player = FindObjectOfType<PlayerController>();
         rb = GetComponent<Rigidbody2D>();
         healthValue = FindObjectOfType<EnemyHealthSystem>();
-      
-        
+
+        GetRef();
     }
 
     private void Update()
@@ -98,10 +98,24 @@ public class WolfAI : MonoBehaviour
             else
                 player.HurtPlayer(40);
         }
+        if (other.gameObject.CompareTag("Arrow"))
+        {
+            healthValue.DamageTaken(10);
+            PlayAttack();
+        }
     }
     void HurtMe()
     {
-        player.HurtEnemy(20);
+        if (player.animOne.sword)
+        {
+            healthValue.DamageTaken(dmg);
+            PlayAttack();
+        }
+        if (player.animOne.axe)
+        {
+            healthValue.DamageTaken(20);
+            PlayAttack();
+        }
     }
     void WolfDeath()
     {

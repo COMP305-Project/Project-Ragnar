@@ -12,7 +12,7 @@ public class RatMovementInMain : MonoBehaviour
     public LayerMask wall;
     public Vector2 direction;
     private PlayerControllerInMain player;
-
+    private SoundManager soundManager;
     private RatHealth health;
     public bool ratDeath;
     public int damageTaken;
@@ -23,6 +23,7 @@ public class RatMovementInMain : MonoBehaviour
 
         health = FindObjectOfType<RatHealth>();
         ratDeath = false;
+        soundManager = GameObject.FindObjectOfType<SoundManager>();
     }
 
     // Update is called once per frame
@@ -34,10 +35,8 @@ public class RatMovementInMain : MonoBehaviour
         Movement();
         RatDeath();
     }
-    void Movement()
-    {
-        transform.position += new Vector3(direction.x * speed * Time.deltaTime, 0f, 0f);
-    }
+    void Movement() => transform.position += new Vector3(direction.x * speed * Time.deltaTime, 0f, 0f);
+   
 
     void Flip()
     {
@@ -65,21 +64,23 @@ public class RatMovementInMain : MonoBehaviour
     {
         if (other.gameObject.name == "Player" && player.attack)
         {
-            Invoke("HurtMe", 0.5f);
+            Invoke("HurtMe",0.5f);
+            
         }
     }
     void HurtMe()
     {
-        if (player.attack && player.timer >= 27)
+        if ( player.timer >= 27)
         {
             health.DamageTaken(damageTaken);
-            Debug.Log(damageTaken);
+            Debug.Log(damageTaken); 
+            soundManager.PlaySound(SOUND_FX.ATTACK);
         }
 
-     
-
-
+        else if (player.animOne.axe && player.timer >= 27)
+            health.DamageTaken(10);
     }
+    
     public void RatDeath()
     {
         if (health.healthBar.value == 0)

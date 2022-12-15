@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DrugarAxeMovement : MonoBehaviour
+public class DrugarAxeMovement : SoundController
 {
     // Start is called before the first frame update
     [Header("DrugarBrain")]
@@ -41,6 +41,7 @@ public class DrugarAxeMovement : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         healthValue = FindObjectOfType<DrugarAxeHealth>();
         anim = GetComponent<Animator>();
+        GetRef();
 
     }
 
@@ -96,7 +97,12 @@ public class DrugarAxeMovement : MonoBehaviour
         {
             Invoke("HurtMe", 0.5f);
         }
-        
+        if (other.gameObject.CompareTag("Arrow"))
+        {
+            healthValue.DamageTaken(10);
+            PlayAttack();
+        }
+
     }
     private void OnCollisionStay2D(Collision2D other)
     {
@@ -119,10 +125,18 @@ public class DrugarAxeMovement : MonoBehaviour
     }
     void HurtMe()
     {
-       if(player.animOne.sword) 
+       if(player.animOne.sword)
+        {
             healthValue.DamageTaken(60);
+            PlayAttack();
+        }
+           
        else if (player.animOne.axe)
+        {
             healthValue.DamageTaken(10);
+            PlayAttack();
+        }
+           
     }
     void DrugarDeath()
     {

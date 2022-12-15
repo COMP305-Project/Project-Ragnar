@@ -12,31 +12,32 @@ public struct animValue
 }
 public class PlayerController : MonoBehaviour
 {
-    public float _speed;
-    public float _force;
-  
-   protected Rigidbody2D _rigidibody;
-    public int dmgCount;
-    public bool startChase;
-    public bool endChase;   
-    public HealthController healthController;
-    public EnemyHealthSystem enemyHealthSystem;
-    public DodgeBar dodge;
-    public bool attack;
-    public int radius;
-    public string direction;
-     protected Animator anim;
-   
-    
+    [Header("Movement Properties")]
     public float dodgeSpeed;
     public float delay = 0.2f;
     public bool dashPerformed;
+    public float _speed;
+    public float _force;
 
+    [Header("Attack System")]
+    public int dmgCount;
+    public bool attack;
+    public int radius;
+    public string direction;
     public int timer;
+
+    [Header("Other")]
+    public HealthController healthController;
+    public EnemyHealthSystem enemyHealthSystem;
+    public DodgeBar dodge;
+    public  animValue animOne;
+
+
+    protected Animator anim;
+    protected Rigidbody2D _rigidibody;
+    public SoundManager soundManager;
+
     
-   public  animValue animOne;
-   
-    // Start is called before the first frame update
     void Start()
     {
         _rigidibody = GetComponent<Rigidbody2D>();
@@ -44,23 +45,23 @@ public class PlayerController : MonoBehaviour
         anim = GetComponent<Animator>();
         dodge = FindObjectOfType<DodgeBar>();
         enemyHealthSystem = FindObjectOfType<EnemyHealthSystem>();
+        soundManager = GameObject.Find("SoundManager").GetComponent<SoundManager>(); 
         animOne.sword = true;
        
        
     }
 
-    // Update is called once per frame
    
     void FixedUpdate()
     {
+      
 
-        if (healthController.healthBar.value == 0)
-            SceneManager.LoadScene("DeathSceneLvlTwo");
-
+        Death();
         WeaponActiveCheck();
         DashPerformed();
         Movement();
         Attack();
+
     }
 
     public float xM(float x)
@@ -107,41 +108,46 @@ public class PlayerController : MonoBehaviour
     {
         float x = Input.GetAxisRaw("Horizontal");
         float y = Input.GetAxisRaw("Vertical");
-      
-       // bool dodge = Input.GetKeyDown(KeyCode.Space);
 
-        if (x != 0.0f)
+        // bool dodge = Input.GetKeyDown(KeyCode.Space);
+        if (!animOne.bow)
         {
-            transform.position += new Vector3(xM(x), 0.0f, 0.0f) * Time.deltaTime * _speed;
-            anim.SetInteger("AnimationType", 1);
-            Dash();
+            if (x != 0.0f)
+            {
+                transform.position += new Vector3(xM(x), 0.0f, 0.0f) * Time.deltaTime * _speed;
+                anim.SetInteger("AnimationType", 1);
+                Dash();
 
 
+
+            }
+            else
+            {
+                anim.SetInteger("AnimationType", 0);
+
+
+            }
+
+
+
+            if (y != 0.0f)
+            {
+                transform.position += new Vector3(0.0f, yM(y), 0.0f) * Time.deltaTime * _speed;
+                anim.SetInteger("AnimationType", 1);
+                Dash();
+
+            }
+            else
+                anim.SetInteger("AnimationType", 0);
 
         }
         else
-        {
-            anim.SetInteger("AnimationType", 0);
-          
-          
-        }
-
-  
-
-        if (y != 0.0f)
-        {
-            transform.position += new Vector3(0.0f, yM(y), 0.0f) * Time.deltaTime * _speed;
-            anim.SetInteger("AnimationType", 1);
-            Dash();
-
-        }
-        else
-            anim.SetInteger("AnimationType", 0);
+            BowWalk(x, y);
 
     }
    
 
-    private void Dash()
+   public void Dash()
     {
         float dash = Input.GetAxisRaw("Jump");
         if (dash > 0 && direction == "right" && dodge.dodgeBar.value == 100)
@@ -149,7 +155,8 @@ public class PlayerController : MonoBehaviour
             // Vector3 dir= Vector3.right - this.transform.position.x;
             _rigidibody.AddForce(Vector2.right * dodgeSpeed, ForceMode2D.Impulse);
             StartCoroutine(DodgeReset());
-           
+            soundManager.PlaySound(SOUND_FX.DASH);
+
         }
       
         if (dash > 0 && direction == "left" && dodge.dodgeBar.value == 100)
@@ -157,7 +164,8 @@ public class PlayerController : MonoBehaviour
             // Vector3 dir= Vector3.right - this.transform.position.x;
             _rigidibody.AddForce(Vector2.left * dodgeSpeed, ForceMode2D.Impulse);
             StartCoroutine(DodgeReset());
-           
+            soundManager.PlaySound(SOUND_FX.DASH);
+
         }
        
         if (dash > 0 && direction == "top" && dodge.dodgeBar.value == 100)
@@ -165,7 +173,8 @@ public class PlayerController : MonoBehaviour
             // Vector3 dir= Vector3.right - this.transform.position.x;
             _rigidibody.AddForce(Vector2.up * dodgeSpeed, ForceMode2D.Impulse);
             StartCoroutine(DodgeReset());
-           
+            soundManager.PlaySound(SOUND_FX.DASH);
+
         }
        
         if (dash > 0 && direction == "bottom" && dodge.dodgeBar.value == 100)
@@ -173,9 +182,12 @@ public class PlayerController : MonoBehaviour
             // Vector3 dir= Vector3.right - this.transform.position.x;
             _rigidibody.AddForce(Vector2.down * dodgeSpeed, ForceMode2D.Impulse);
             StartCoroutine(DodgeReset());
-           
+            soundManager.PlaySound(SOUND_FX.DASH);
+
         }
-       
+
+        
+
 
     }
     protected bool DashPerformed()
@@ -194,11 +206,11 @@ public class PlayerController : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
+       
         
         if (other.gameObject.CompareTag("Spike"))
         {
-           
-            healthController.DamageTaken(30);
+            HurtPlayer(10);
         }
         
      
@@ -209,15 +221,24 @@ public class PlayerController : MonoBehaviour
             other.gameObject.SetActive(false);
 
         }
-        if (other.gameObject.name == "gemBlue")
+      
+
+    }
+    private void OnCollisionEnter2D(Collision2D other)
+    {
+        if (other.gameObject.CompareTag("EnemyArrow"))
         {
-            
-            other.gameObject.SetActive(false);
-            SceneManager.LoadScene("LevelCleared");
+            HurtPlayer(5);
+            if (animOne.block)
+                HurtPlayer(0);
+        }
+        if (other.gameObject.CompareTag("Ball"))
+        {
+            HurtPlayer(90);
+            if (animOne.block)
+                HurtPlayer(50);
 
         }
-
-
     }
 
 
@@ -230,6 +251,7 @@ public class PlayerController : MonoBehaviour
         {
             if (fire > 0.0)
             {
+              
                 anim.SetInteger("AnimationType", 3);
                 timer++;
                 if (timer >= 30)
@@ -247,6 +269,7 @@ public class PlayerController : MonoBehaviour
             
         if (animOne.sword)
         {
+          
             if (fire > 0.0)
             {
                 anim.SetInteger("AnimationType", 2);
@@ -263,7 +286,10 @@ public class PlayerController : MonoBehaviour
                 attack = false;
             }
         }
+
       
+       
+
     }
 
     public void WeaponActiveCheck()
@@ -292,10 +318,14 @@ public class PlayerController : MonoBehaviour
             animOne.block = false;
         }
 
-       if(Input.GetKey(KeyCode.Mouse1) && animOne.axe)
+       if(  animOne.axe)
         {
-            anim.SetInteger("AnimationType", 4);
-            animOne.block = true;
+            if (Input.GetKey(KeyCode.Mouse1))
+            {
+                anim.SetInteger("AnimationType", 4);
+                animOne.block = true;
+            }
+           
             
         }
         else
@@ -312,34 +342,61 @@ public class PlayerController : MonoBehaviour
     public void HurtPlayer(int dmg)
     {      
          healthController.DamageTaken(dmg);
-     }
-   public void HurtEnemy(int dmg)
+        soundManager.PlaySound(SOUND_FX.HURT);
+
+    }
+    public void HurtEnemy(int dmg)
     {
         enemyHealthSystem.DamageTaken(dmg);
     }
-    protected virtual void AttackInMain()
+  
+    public virtual void Death()
     {
-
-
-
-        if (Input.GetKey(KeyCode.Mouse0))
+        if (healthController.healthBar.value == 0)
         {
-            anim.SetInteger("AnimationType", 2);
-            timer++;
-            if (timer >= 30)
+            soundManager.PlaySound(SOUND_FX.DEATH);
+            SceneManager.LoadScene("DeathSceneLvlTwo");
+        }
+           
+    }
+    public void BowWalk(float x, float y)
+    {
+        if (animOne.bow)
+        {
+            anim.SetInteger("AnimationType", 5);
+          
+
+           
+
+            if (x != 0.0f)
             {
-                timer = 0;
+                transform.position += new Vector3(xM(x), 0.0f, 0.0f) * Time.deltaTime * _speed;
+                anim.SetInteger("AnimationType", 6);
+                Dash();
+
+             }
+            else
+                anim.SetInteger("AnimationType", 5);
+
+
+            if (y != 0.0f)
+            {
+                transform.position += new Vector3(0.0f, yM(y), 0.0f) * Time.deltaTime * _speed;
+                anim.SetInteger("AnimationType", 6);
+                Dash();
+
             }
-            attack = true;
+            else
+                anim.SetInteger("AnimationType", 5);
+
 
         }
-        else
-        {
-            attack = false;
-        }
-
 
     }
+
+   
+
+    
 
 }
 

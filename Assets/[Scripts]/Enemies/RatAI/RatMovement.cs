@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class RatMovement : MonoBehaviour
+public class RatMovement : SoundController
 {
 
     public Transform aheadCheck;
@@ -24,6 +24,7 @@ public class RatMovement : MonoBehaviour
       
         health = FindObjectOfType<RatHealth>();
         ratDeath = false;
+        GetRef();
     }
 
     // Update is called once per frame
@@ -61,6 +62,12 @@ public class RatMovement : MonoBehaviour
             else
                 player.HurtPlayer(10);
         }
+        if (other.gameObject.CompareTag("Arrow"))
+        {
+            PlayAttack();
+            health.DamageTaken(20);
+
+        }
     }
     private void OnCollisionStay2D(Collision2D other)
     {
@@ -75,18 +82,23 @@ public class RatMovement : MonoBehaviour
         {
             health.DamageTaken(damageTaken);
             Debug.Log(damageTaken);
+            PlayAttack();
         }
-            
-        else if (player.animOne.axe && player.timer >= 27)
-            health.DamageTaken(10);
 
+        else if (player.animOne.axe && player.timer >= 27)
+        {
+            health.DamageTaken(10);
+            PlayAttack();
+        }
        
-    }
+
+
+        }
    public  void RatDeath()
     {
         if (health.healthBar.value == 0)
         {
-            this.gameObject.SetActive(false);
+            Destroy(this.gameObject);
             ratDeath = true;
         }
            

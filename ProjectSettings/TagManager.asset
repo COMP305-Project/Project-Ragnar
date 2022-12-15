@@ -8,6 +8,12 @@ TagManager:
   - Spike
   - Melee
   - Enemy
+  - Arrow
+  - BlueGem
+  - GreenPotion
+  - EnemyArrow
+  - FinalEnemy
+  - Ball
   layers:
   - Default
   - TransparentFX
@@ -19,9 +25,9 @@ TagManager:
   - outerwall
   - WolfEnemy
   - Drugar
-  - 
-  - 
-  - 
+  - Arrow
+  - Door
+  - Boss
   - 
   - 
   - 

@@ -6,52 +6,63 @@ public class PlayerControllerInMain : PlayerController
 {
 
    
-
+   
     void Start()
     {
         _rigidibody = GetComponent<Rigidbody2D>();
         healthController = GameObject.Find("PlayerHealthSystem").GetComponent<HealthController>();
         anim = GetComponent<Animator>();
-     
+        
         dodge = FindObjectOfType<DodgeBar>();
         enemyHealthSystem = FindObjectOfType<EnemyHealthSystem>();
-       
+        soundManager = GameObject.Find("SoundManager").GetComponent<SoundManager>();
+
     }
+
     private void Update()
     {
-        if (healthController.healthBar.value == 0)
-            SceneManager.LoadScene("DeathScene");
-        AttackInMain();
+        AttackAnimation();
     }
-    // Update is called once per frame
     void FixedUpdate()
     {
-        
+       
+        Death();
         Movement();
         DashPerformed();
     }
-    protected override void AttackInMain()
+  
+    void AttackAnimation()
     {
-
-
-
         if (Input.GetKey(KeyCode.Mouse0))
         {
-            anim.SetInteger("AnimationType", 2);
+            anim.SetInteger("AnimationType",2);
+            attack = true;
             timer++;
             if (timer >= 30)
             {
                 timer = 0;
             }
-            attack = true;
-
         }
         else
         {
             attack = false;
         }
+       
 
 
     }
+    public override void Death()
+    {
+        if (healthController.healthBar.value == 0)
+        {
+            soundManager.PlaySound(SOUND_FX.DEATH);
+            SceneManager.LoadScene("DeathScene");
+        }
+
+    }
+
+
+
+
 
 }

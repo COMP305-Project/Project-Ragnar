@@ -11,7 +11,7 @@ public class WolfAiDetection : MonoBehaviour
 
     private Transform player;
     public LayerMask playerMask;
-   private Collider2D colliderName;
+   public Collider2D colliderName;
 
     public Vector2 playerDirection;
     public float enemyDirectionValue;
@@ -25,6 +25,7 @@ public class WolfAiDetection : MonoBehaviour
         los = false;
         playerDetected = false;
         player = FindObjectOfType<PlayerController>().transform;
+       
        
     }
 
@@ -65,7 +66,6 @@ public class WolfAiDetection : MonoBehaviour
         playerDirection.Normalize();
         playerDirectionValue = (playerDirection.x < 0) ? -1.0f : 1.0f;
         enemyDirectionValue = GetComponentInParent<WolfAI>().direction.y;
-
-        los = (lineCreate.collider.gameObject.name == "Player") && (playerDirectionValue == enemyDirectionValue);
+         los = (lineCreate.collider.gameObject.name == "Player") && (playerDirectionValue == enemyDirectionValue);
     }
 }

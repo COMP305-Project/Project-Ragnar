@@ -31,6 +31,7 @@ public class DrugarAxeSecondMovement : MonoBehaviour
     public bool hurtPlayer;
 
     private Animator anim;
+    private SoundManager soundController;
 
     private void Start()
     {
@@ -40,10 +41,11 @@ public class DrugarAxeSecondMovement : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         healthValue = FindObjectOfType<SecondDrugarHealth>();
         anim = GetComponent<Animator>();
+        soundController = GameObject.FindObjectOfType<SoundManager>();
 
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
         var wallAhead = Physics2D.Linecast(center.position, aheadCheck.position, wall);
 
@@ -95,6 +97,11 @@ public class DrugarAxeSecondMovement : MonoBehaviour
         {
             Invoke("HurtMe", 0.5f);
         }
+        if (other.gameObject.CompareTag("Arrow"))
+        {
+            healthValue.DamageTaken(15);
+            soundController.PlaySound(SOUND_FX.ATTACK);        
+        }
 
     }
     private void OnCollisionStay2D(Collision2D other)
@@ -118,7 +125,17 @@ public class DrugarAxeSecondMovement : MonoBehaviour
     }
     void HurtMe()
     {
-        healthValue.DamageTaken(60);
+        if (player.animOne.sword)
+        {
+            healthValue.DamageTaken(60);
+            soundController.PlaySound(SOUND_FX.ATTACK);
+        }
+        if (player.animOne.axe)
+        {
+            healthValue.DamageTaken(20);
+            soundController.PlaySound(SOUND_FX.ATTACK);
+        }
+       
     }
     void DrugarDeath()
     {

@@ -5,7 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class ManagerScene : MonoBehaviour
 {
-    // Start is called before the first frame update
+    
    public void SceneLoad()
     {
         SceneManager.LoadScene("Main");
@@ -20,4 +20,18 @@ public class ManagerScene : MonoBehaviour
     {
         SceneManager.LoadScene("StartMenu");
     }
+
+    public void Options()
+    {
+        GameConfig.Instance().PreviousScene = SceneManager.GetActiveScene().buildIndex;
+        SceneManager.LoadScene("Options");
+    }
+    public void BackBtnPressed()
+    {
+        SceneManager.LoadScene(GameConfig.Instance().PreviousScene);
+    }
+
+    public void ToLevelThree() => SceneManager.LoadScene("Level3");
+
+   
 }

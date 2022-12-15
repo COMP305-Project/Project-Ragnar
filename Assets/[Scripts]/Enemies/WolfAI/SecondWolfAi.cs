@@ -19,7 +19,7 @@ public class SecondWolfAi : MonoBehaviour
     public float forceSpeed = 2f;
     public bool check;
 
-
+    public int dmg;
     public LayerMask wall;
     public float radius;
     private SecondWolfDetection detected;
@@ -29,7 +29,7 @@ public class SecondWolfAi : MonoBehaviour
     public float time;
     public Vector2 attack;
     public bool hurtPlayer;
-   
+    SoundManager soundManager;
     private void Start()
     {
         direction = Vector2.left;
@@ -37,8 +37,8 @@ public class SecondWolfAi : MonoBehaviour
         player = FindObjectOfType<PlayerController>();
         rb = GetComponent<Rigidbody2D>();
         healthValue = FindObjectOfType<EnemHealth>();
-
-
+        soundManager = GameObject.FindObjectOfType<SoundManager>();
+        
     }
 
     private void Update()
@@ -96,14 +96,29 @@ public class SecondWolfAi : MonoBehaviour
         if (other.gameObject.name == "Player" && hurtPlayer)
         {
             if (player.animOne.block)
-                player.HurtPlayer(5);
+                player.HurtPlayer(1);
             else
                 player.HurtPlayer(40);
+        }
+        if (other.gameObject.CompareTag("Arrow"))
+        {
+            healthValue.DamageTaken(10);
+            soundManager.PlaySound(SOUND_FX.ATTACK);
         }
     }
     void HurtMe()
     {
-        healthValue.DamageTaken(20);
+        if (player.animOne.sword)
+        {
+            healthValue.DamageTaken(dmg);
+            soundManager.PlaySound(SOUND_FX.ATTACK);
+        }
+        if (player.animOne.axe)
+        {
+            healthValue.DamageTaken(20);
+            soundManager.PlaySound(SOUND_FX.ATTACK);
+        }
+        
     }
     void WolfDeath()
     {

@@ -77,7 +77,6 @@ public class EnemyController : MonoBehaviour
         
           
        
-            Chase();
 
 
     }
@@ -88,49 +87,8 @@ public class EnemyController : MonoBehaviour
         Gizmos.color = Color.yellow;
         Gizmos.DrawWireSphere(this.transform.position, radius);
     }
-    public void Chase()
-    {
-        if (playerController.startChase)
-        {
-            Vector3 direction = transform.position - _player.position;
-            float magnitude = direction.magnitude;
-            float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-            direction.Normalize();
-            transform.Translate(direction * Time.deltaTime * chaseSpeed);
-            Quaternion rotation = Quaternion.LookRotation(Vector3.forward, direction);
-            transform.rotation = Quaternion.RotateTowards(transform.rotation, rotation, Time.deltaTime * rSpeed);
-        }
-        if (playerController.endChase)
-            Return();
-       
-           
-    }
+    
 
-    public void Return()
-    {
-        if (playerController.endChase)
-        {
-            Vector3 direction = transform.position - originalPosition;
-            float magnitude = direction.magnitude;
-            float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-            direction.Normalize();
-            transform.Translate(direction * Time.deltaTime * chaseSpeed);
-            Quaternion rotation = Quaternion.LookRotation(Vector3.forward, direction);
-            transform.rotation = Quaternion.RotateTowards(transform.rotation, rotation, Time.deltaTime * rSpeed);
-            if (transform.position == originalPosition)
-            {
-                transform.Translate(direction * Time.deltaTime * 0);
-                transform.rotation = Quaternion.RotateTowards(transform.rotation, rotation, Time.deltaTime * 0);
-            }
-
-            else
-            {
-                transform.Translate(direction * Time.deltaTime * chaseSpeed);
-                transform.rotation = Quaternion.RotateTowards(transform.rotation, rotation, Time.deltaTime * rSpeed);
-            }
-
-        }
-       
-    }
+    
 
 }
