@@ -10,7 +10,7 @@ public struct animValue
     public bool bow;
     public bool block;
 }
-public class PlayerController : MonoBehaviour
+public class PlayerController : MonoBehaviour , IDeath
 {
     [Header("Movement Properties")]
     public float dodgeSpeed;
@@ -37,7 +37,7 @@ public class PlayerController : MonoBehaviour
     protected Rigidbody2D _rigidibody;
     public SoundManager soundManager;
 
-    
+    IDeath deathScene;
     void Start()
     {
         _rigidibody = GetComponent<Rigidbody2D>();
@@ -219,6 +219,7 @@ public class PlayerController : MonoBehaviour
         {
             healthController.GainHealth(40);
             other.gameObject.SetActive(false);
+            soundManager.PlaySound(SOUND_FX.HEALTH);
 
         }
       
@@ -242,7 +243,7 @@ public class PlayerController : MonoBehaviour
     }
 
 
-    private void Attack()
+    protected void Attack()
     {
         WeaponActiveCheck();
         float fire = Input.GetAxisRaw("Fire1");
@@ -349,7 +350,7 @@ public class PlayerController : MonoBehaviour
     {
         enemyHealthSystem.DamageTaken(dmg);
     }
-  
+
     public virtual void Death()
     {
         if (healthController.healthBar.value == 0)
@@ -357,8 +358,9 @@ public class PlayerController : MonoBehaviour
             soundManager.PlaySound(SOUND_FX.DEATH);
             SceneManager.LoadScene("DeathSceneLvlTwo");
         }
-           
     }
+
+  
     public void BowWalk(float x, float y)
     {
         if (animOne.bow)

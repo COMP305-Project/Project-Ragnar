@@ -17,6 +17,9 @@ public class BossMovement : SoundController
     private BossDetectsPlayer detected;
     private Vector3 lookDirection;
     private Rigidbody2D rb;
+
+   
+    public GameObject rune;
     void Start()
     {
         direction = Vector2.left;
@@ -25,6 +28,7 @@ public class BossMovement : SoundController
         player = FindObjectOfType<PlayerController>();
         rb = GetComponent<Rigidbody2D>();
         GetRef();
+       
     }
 
     // Update is called once per frame
@@ -32,7 +36,8 @@ public class BossMovement : SoundController
     {
         var wallAhead = Physics2D.Linecast(center.position, aheadCheck.position, wall);
 
-
+        
+           
 
         if (wallAhead)
             Flip();
@@ -59,11 +64,7 @@ public class BossMovement : SoundController
             Invoke("HurtMe", 0.5f);
         }
        
-        if (other.gameObject.CompareTag("Arrow"))
-        {
-            health.DamageTaken(5);
-            PlayAttack();
-        }
+       
     }
     void Movement()
     {
@@ -86,12 +87,18 @@ public class BossMovement : SoundController
             health.DamageTaken(5);
             PlayAttack();
         }
-
+       
     }
     void BossDeath()
     {
         if (health.healthBar.value <= 0)
+        {
+            rune.gameObject.SetActive(true);
             this.gameObject.SetActive(false);
+        }
+            
+
+        
     }
     void Flip()
     {

@@ -9,5 +9,8 @@ public enum SOUND_FX
     ATTACK,
     HURT,
     COIN,
-    Rune
+    Rune,
+    HEALTH,
+    CLICK,
+    Music
 }

@@ -13,6 +13,7 @@ public class DeathSceneLvlTwo : MonoBehaviour
 
     public void Restart()
     {
+        
         SceneManager.LoadScene("Level2");
     }
 

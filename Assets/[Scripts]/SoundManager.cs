@@ -29,11 +29,15 @@ public  class SoundManager : MonoBehaviour
         clips.Add(Resources.Load<AudioClip>("Audio/hurt"));
         clips.Add(Resources.Load<AudioClip>("Audio/coin"));
         clips.Add(Resources.Load<AudioClip>("Audio/Rune"));
+        clips.Add(Resources.Load<AudioClip>("Audio/health"));
+        clips.Add(Resources.Load<AudioClip>("Audio/click"));
+        clips.Add(Resources.Load<AudioClip>("Audio/ InGameMusic"));
         mixer = Resources.Load<AudioMixer>("Audio/MasterAudioMixer");
 
     }
+   
 
-    
+
    public  void PlaySound(SOUND_FX sound)
     {
         

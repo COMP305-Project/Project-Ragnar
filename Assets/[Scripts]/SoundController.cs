@@ -20,4 +20,10 @@ public class SoundController : MonoBehaviour
     public void PlayDeath()=> soundManager.PlaySound(SOUND_FX.DEATH);
 
     public void PlayRune() => soundManager.PlaySound(SOUND_FX.Rune);
+
+    public void PlayHealthGain() => soundManager.PlaySound(SOUND_FX.HEALTH);
+
+    public void ButtonClick() => soundManager.PlaySound(SOUND_FX.CLICK);
+
+    public void Music() => soundManager.PlaySound(SOUND_FX.Music);
 }

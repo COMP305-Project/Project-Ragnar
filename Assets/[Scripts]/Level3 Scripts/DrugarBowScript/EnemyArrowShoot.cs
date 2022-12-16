@@ -22,7 +22,7 @@ public class EnemyArrowShoot : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (detect.los)
+        if (detect.playerDetected)
         {
             Fire();
             Debug.Log("Arrow fired");

@@ -32,4 +32,10 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/[Scenes]/Level3.unity
     guid: de753822b5c05074681a183952735045
+  - enabled: 1
+    path: Assets/[Scenes]/DeathSceneLvlThree.unity
+    guid: 4cc344fec70f23b458d8eed79be1a11a
+  - enabled: 1
+    path: Assets/[Scenes]/LevelThreeCleared.unity
+    guid: aa36c561e15814940b53060c4f3ecc19
   m_configObjects: {}

@@ -37,7 +37,7 @@ public class DrugerBowMovement : SoundController
         if (wallAhead)
             Flip();
 
-        if (!detected.playerDetected)
+        if (!detected.los)
         {
             transform.rotation = Quaternion.identity;
             Movement();
@@ -107,13 +107,13 @@ public class DrugerBowMovement : SoundController
 
    public void LookAtPlayer()
     {
-        if (detected.playerDetected)
+        if (detected.los)
         {
             lookDirection = player.transform.position - transform.position;
             if(lookDirection!=Vector3.zero)
             {
                 float angle = Mathf.Atan2(lookDirection.y, lookDirection.x) * Mathf.Rad2Deg;
-                transform.rotation = Quaternion.AngleAxis(angle + 90f, Vector3.forward);
+                transform.rotation = Quaternion.AngleAxis(angle + 90 , Vector3.forward);
             }
         }
     }

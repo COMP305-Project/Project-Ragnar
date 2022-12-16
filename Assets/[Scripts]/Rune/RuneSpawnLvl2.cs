@@ -9,18 +9,20 @@ public class RuneSpawnLvl2 :SoundController
     {
         this.gameObject.SetActive(false);
         GetRef();
+       
     }
    
+
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if(collision.gameObject.name=="Player")
         {
             EnemyCount enemyCount = GameObject.FindObjectOfType<EnemyCount>();
             enemyCount.gameObject.SetActive(false);
-            PlayRune();
+          
             Destroy(this.gameObject);
             SceneManager.LoadScene("LevelTwoCleared");
-            
+
         }
     }
 }
