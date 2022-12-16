@@ -240,6 +240,26 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
       value: ManagerScene, Assembly-CSharp
       objectReference: {fileID: 0}
+    - target: {fileID: 1784032207267277796, guid: 9c8cbfba131ef1f44a82ef8dd1a95d30, type: 3}
+      propertyPath: m_Type
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1784032207267277796, guid: 9c8cbfba131ef1f44a82ef8dd1a95d30, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 1468787877, guid: ef26b8c4c42a2d5478294d70537fb9c9, type: 3}
+    - target: {fileID: 1784032207267277796, guid: 9c8cbfba131ef1f44a82ef8dd1a95d30, type: 3}
+      propertyPath: m_Color.b
+      value: 0.990566
+      objectReference: {fileID: 0}
+    - target: {fileID: 1784032207267277796, guid: 9c8cbfba131ef1f44a82ef8dd1a95d30, type: 3}
+      propertyPath: m_Color.g
+      value: 0.990566
+      objectReference: {fileID: 0}
+    - target: {fileID: 1784032207267277796, guid: 9c8cbfba131ef1f44a82ef8dd1a95d30, type: 3}
+      propertyPath: m_Color.r
+      value: 0.990566
+      objectReference: {fileID: 0}
     - target: {fileID: 1784032208008784004, guid: 9c8cbfba131ef1f44a82ef8dd1a95d30, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 

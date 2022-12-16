@@ -227,6 +227,26 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
       value: DeathSceneLvlTwo, Assembly-CSharp
       objectReference: {fileID: 0}
+    - target: {fileID: 1984781549464515213, guid: 00e5519b45504854296c7d14c62ea9c1, type: 3}
+      propertyPath: m_Type
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1984781549464515213, guid: 00e5519b45504854296c7d14c62ea9c1, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 2056064929, guid: ef26b8c4c42a2d5478294d70537fb9c9, type: 3}
+    - target: {fileID: 1984781549464515213, guid: 00e5519b45504854296c7d14c62ea9c1, type: 3}
+      propertyPath: m_Color.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1984781549464515213, guid: 00e5519b45504854296c7d14c62ea9c1, type: 3}
+      propertyPath: m_Color.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1984781549464515213, guid: 00e5519b45504854296c7d14c62ea9c1, type: 3}
+      propertyPath: m_Color.r
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1984781549576945156, guid: 00e5519b45504854296c7d14c62ea9c1, type: 3}
       propertyPath: m_Name
       value: Canvas
@@ -342,6 +362,10 @@ PrefabInstance:
     - target: {fileID: 1984781549576945161, guid: 00e5519b45504854296c7d14c62ea9c1, type: 3}
       propertyPath: m_SortingLayerID
       value: 1234470477
+      objectReference: {fileID: 0}
+    - target: {fileID: 1984781550607841619, guid: 00e5519b45504854296c7d14c62ea9c1, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 183
       objectReference: {fileID: 0}
     - target: {fileID: 1984781550647891981, guid: 00e5519b45504854296c7d14c62ea9c1, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
